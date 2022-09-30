@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"encoder/domain"
+	"fmt"
 
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
@@ -35,5 +36,13 @@ func (repo VideoRepositoryDb) Insert(video *domain.Video) (*domain.Video, error)
 }
 
 func (repo VideoRepositoryDb) Find(id string) (*domain.Video, error) {
-	return nil, nil
+
+	var video domain.Video
+	repo.Db.First(&video, "id = ?", id)
+
+	if video.ID == "" {
+		return nil, fmt.Errorf("video not found")
+	}
+
+	return &video, nil
 }
